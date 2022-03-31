@@ -21,7 +21,29 @@ const getById = async (req, res) => {
   }
 };
 
+const create = async (req, res) => {
+  try {
+    const array = req.body;
+    const ID = await salesService.createSalesDate();
+    array.forEach(async ({ productId, quantity }) => {
+      if (productId && quantity) {
+        await salesService.create({ ID, productId, quantity });
+      } 
+    });
+    return res.status(201).json(
+      {
+        id: ID,
+        itemsSold: array,
+      },
+    );
+  } catch (error) {
+    console.log(error);
+    return res.status(500).end();
+  }
+};
+
 module.exports = {
   getAll,
   getById,
+  create,
 };

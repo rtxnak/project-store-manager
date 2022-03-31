@@ -15,7 +15,33 @@ const getById = async (id) => {
   }
 };
 
+const createSalesDate = async () => {
+  try {
+    const createSalesID = await salesModel.createSalesDate();
+
+    return createSalesID;
+  } catch (error) {
+    console.log(error);
+    return { error: 500, message: 'Erro no Servidor' };
+  }
+};
+
+const create = async (product) => {
+  try {
+    const { ID, productId, quantity } = product;
+
+    const created = await salesModel.create({ ID, productId, quantity });
+
+    return created;
+  } catch (error) {
+    console.log(error);
+    return { error: 500, message: 'Erro no Servidor' };
+  }
+};
+
 module.exports = { 
   getAll, 
   getById,
+  createSalesDate,
+  create,
 };
