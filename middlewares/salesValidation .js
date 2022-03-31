@@ -9,8 +9,8 @@ const isValidProductId = (req, res, next) => {
 
 const isValidSalesQuantity = (req, res, next) => {
   const array = req.body;
-  const quantityisNull = array.some(({ quantity }) => !quantity);
-  if (quantityisNull) {
+  const quantityisUndefined = array.some(({ quantity }) => quantity === undefined);
+  if (quantityisUndefined) {
     res.status(400).json({ message: '"quantity" is required' });
   }
 
