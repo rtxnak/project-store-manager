@@ -1,10 +1,18 @@
 const express = require('express');
 const salesController = require('../controllers/salesController');
 
+const {
+  isValidProductId,
+  isValidSalesQuantity,
+} = require('../middlewares/salesValidation ');
+
 const routes = express.Router();
 
 routes
   .get('/', salesController.getAll)
-  .get('/:id', salesController.getById);
-
+  .get('/:id', salesController.getById)
+  .post('/',
+    isValidProductId,
+    isValidSalesQuantity,
+    salesController.create);
 module.exports = routes;
