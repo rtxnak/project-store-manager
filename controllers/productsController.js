@@ -21,7 +21,23 @@ const getById = async (req, res) => {
   }
 };
 
+const create = async (req, res) => {
+  try {
+      const { name, quantity } = req.body;
+
+      // a validação deste controller está sendo feita pelo middlware nas rotas
+
+      const product = await productsService.create({ name, quantity });
+
+      return res.status(201).json(product);
+  } catch (error) {
+      console.log(error);
+      return res.status(500).end();
+  }
+};
+
 module.exports = {
   getAll,
   getById,
+  create,
 };
