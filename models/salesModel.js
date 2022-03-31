@@ -1,13 +1,30 @@
 const connection = require('./connection');
 
 const getAll = async () => {
-  const [sales] = await connection.execute('SELECT * FROM sales');
+  // eslint-disable-next-line max-len
+  const query = `select
+  salesproducts.sale_id as saleId,
+  salesproducts.product_id as productId,
+  salesproducts.quantity as quantity,
+  sales.date as date
+  from StoreManager.sales_products as salesproducts
+  join StoreManager.sales as sales on sales.id = salesproducts.sale_id
+  order by saleId, productId asc`;
+  const [sales] = await connection.execute(query);
   return sales;
 };
 
-const getById = async (id) => {
-  const [sales] = await connection.execute('SELECT * FROM sales WHERE id = ?', [id]);
-  return sales[0];
+const getById = async (saleId) => {
+  const query = `select
+  sales.product_id as productId,
+  sales.quantity as quantity,
+  dates.date as date
+  from StoreManager.sales_products as sales
+  join StoreManager.sales as dates on dates.id = sales.sale_id
+  WHERE id = ?
+  order by productId asc;`;
+  const [sales] = await connection.execute(query, [saleId]);
+  return sales;
 };
 
 const createSalesDate = async () => {
@@ -39,7 +56,8 @@ module.exports = {
   create,
 };
 
-/*
-       'INSERT INTO sales_products (sale_Id, product_id, quantity) VALUES (?, ?, ?)',
-      [productId, quantity],
+/* 
+  const [sales] = await connection.execute('SELECT * FROM sales');
+
+    const [sales] = await connection.execute('SELECT * FROM sales WHERE id = ?', [id]);
 */
