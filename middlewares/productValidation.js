@@ -1,12 +1,21 @@
-const isValidName = (req, res, next) => {
+const productsService = require('../services/productsService');
+
+const isValidName = async (req, res, next) => {
   const { name } = req.body;
   
   if (!name) {
     return res.status(400).json({ message: '"name" is required' }); 
   }
 
-  if (name.length < 5) {
-    return res.status(400).json({ message: '"name" lenght must be at least 5 characters long' }); 
+  if (name.length <= 5) {
+    return res.status(422).json({ message: '"name" length must be at least 5 characters long' }); 
+  }
+
+  const products = await productsService.getAll();
+  const isNameExist = products.some(({ name: DBname }) => DBname === name);
+
+  if (isNameExist) {
+    return res.status(409).json({ message: 'Product already exists' }); 
   }
 
   next();
@@ -15,11 +24,11 @@ const isValidName = (req, res, next) => {
 const isValidProductQuantity = (req, res, next) => {
   const { quantity } = req.body;
   
-  if (!quantity) {
+  if (quantity === undefined) {
     return res.status(400).json({ message: '"quantity" is required' }); 
   }
 
-  if (quantity <= 0) {
+  if (quantity < 0) {
     return res.status(422).json({ message: '"quantity" must be greater than or equal to 1' }); 
   }
 
