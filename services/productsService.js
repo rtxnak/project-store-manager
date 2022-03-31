@@ -15,7 +15,21 @@ const getById = async (id) => {
   }
 };
 
+const create = async (product) => {
+  try {
+    const { name, quantity } = product;
+
+    const created = await productsModel.create({ name, quantity });
+
+    return created;
+  } catch (error) {
+    console.log(error);
+    return { error: 500, message: 'Erro no Servidor' };
+  }
+};
+
 module.exports = { 
   getAll, 
   getById,
+  create,
 };
