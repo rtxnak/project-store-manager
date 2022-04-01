@@ -11,10 +11,16 @@ const isValidName = async (req, res, next) => {
     return res.status(422).json({ message: '"name" length must be at least 5 characters long' }); 
   }
 
-  const products = await productsService.getAll();
-  const isNameExist = products.some(({ name: DBname }) => DBname === name);
+  next();
+};
 
-  if (isNameExist) {
+const isNameExist = async (req, res, next) => {
+  const { name } = req.body;
+
+  const products = await productsService.getAll();
+  const exist = products.some(({ name: DBname }) => DBname === name);
+
+  if (exist) {
     return res.status(409).json({ message: 'Product already exists' }); 
   }
 
@@ -28,7 +34,7 @@ const isValidProductQuantity = (req, res, next) => {
     return res.status(400).json({ message: '"quantity" is required' }); 
   }
 
-  if (quantity < 0) {
+  if (quantity <= 0) {
     return res.status(422).json({ message: '"quantity" must be greater than or equal to 1' }); 
   }
 
@@ -37,5 +43,6 @@ const isValidProductQuantity = (req, res, next) => {
 
 module.exports = {
   isValidName,
+  isNameExist,
   isValidProductQuantity,
 };
