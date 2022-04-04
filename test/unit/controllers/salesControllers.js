@@ -153,4 +153,30 @@ describe('Sales controller', () => {
       // });
     });
   });
+
+  describe('endpoint PUT on /sales/:id', () => {
+    describe('sale was updated', () => {
+      const response = {};
+      const request = { body: newSaleBody, params: { id: 4 } };
+      before(() => {
+        response.status = sinon.stub()
+          .returns(response);
+        response.json = sinon.stub()
+          .returns();
+        sinon.stub(salesService, 'update').resolves(newSaleReturn)
+      })
+
+      after(() => salesService.update.restore());
+
+      it('return status 200', async () => {
+        await salesController.update(request, response);
+        expect(response.status.calledWith(200)).to.be.equal(true)
+      });
+      it('return json with product', async () => {
+        await salesController.update(request, response);
+        console.log(response.json)
+        expect(response.json.calledWith(newSaleReturn)).to.be.equal(true)
+      });
+    });
+  });
 });

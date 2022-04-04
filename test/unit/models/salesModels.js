@@ -30,6 +30,12 @@ const newSaleReturn = {
   quantity: 2
 };
 
+const updateSale = [
+  {
+    productId: 1,
+    quantity: 6
+  }
+];
 
 describe('sales models', () => {
   describe('endpoint GET on /sales', () => {
@@ -103,6 +109,22 @@ describe('sales models', () => {
         expect(response.saleId).to.be.equal(newSaleReturn.saleId);
         expect(response.productId).to.be.equal(newSaleReturn.productId);
         expect(response.quantity).to.be.equal(newSaleReturn.quantity);
+      });
+    });
+  });
+
+  describe('endpoint PUT on /sales/:id', () => {
+    describe('sales was updated', () => {
+      before(async () => {
+        const execute = [{ insertId: 1 }];
+        sinon.stub(connection, 'execute').resolves(execute);
+      });
+      after(() => connection.execute.restore());
+
+      it('return the product updated', async () => {
+        const saleId = 1;
+        const response = await salesModel.update(saleId, updateSale);
+        expect(response.saleId).to.be.equal(saleId);        expect(response.itemUpdated).to.be.equal(updateSale);
       });
     });
   });
