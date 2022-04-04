@@ -3,6 +3,7 @@ const productsController = require('../controllers/productsController');
 
 const {
   isValidName,
+  isNameExist,
   isValidProductQuantity,
 } = require('../middlewares/productValidation');
 
@@ -12,8 +13,13 @@ routes
   .get('/', productsController.getAll)
   .get('/:id', productsController.getById)
   .post('/', 
-  isValidName,
   isValidProductQuantity, 
-  productsController.create);
+  isValidName,
+  isNameExist,
+  productsController.create)
+  .put('/:id', 
+  isValidProductQuantity, 
+  isValidName,
+  productsController.update);
 
 module.exports = routes;
