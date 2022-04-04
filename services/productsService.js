@@ -28,8 +28,25 @@ const create = async (product) => {
   }
 };
 
-module.exports = { 
-  getAll, 
+const update = async (id, name, quantity) => {
+  try {
+    const exist = await productsModel.getById(id);
+
+    if (!exist) {
+      return { error: 404, message: 'Product not found' };
+    }
+
+    const updated = await productsModel.update({ id, name, quantity });
+
+    return updated;
+  } catch (error) {
+    return { error: 500, message: 'Erro no Servidor' };
+  }
+};
+
+module.exports = {
+  getAll,
   getById,
   create,
+  update,
 };
