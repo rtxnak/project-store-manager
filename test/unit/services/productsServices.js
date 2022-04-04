@@ -2,6 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const connection = require('../../../models/connection');
 const productsService = require('../../../services/productsService');
+const productsModel = require('../../../models/productsModel');
 
 const arrayOfAllSearchedProducts = [
   {
@@ -26,6 +27,12 @@ const newProduct = {
   saleid: 1,
   name: "produto A",
   quantity: 10
+};
+
+const updateProduct = {
+  id: 1,
+  name: "produto B",
+  quantity: 20
 };
 
 describe('products services', () => {
@@ -84,6 +91,7 @@ describe('products services', () => {
       });
     });
   });
+
   describe('endpoint POST on /products', () => {
     describe('product was created', () => {
       before(async () => {
@@ -98,6 +106,28 @@ describe('products services', () => {
         expect(response.id).to.be.equal(oneProduct[0].id);
         expect(response.name).to.be.equal(oneProduct[0].name);
         expect(response.quantity).to.be.equal(oneProduct[0].quantity);
+      });
+    });
+  });
+
+  describe('endpoint PUT on /products/:id', () => {
+    describe('product was updated', () => {
+      before(async () => {
+        const { saleid: id, name, quantity } = newProduct;
+        sinon.stub(productsModel, 'getById').resolves({ id, name, quantity });
+        sinon.stub(productsModel, 'update').resolves(updateProduct);
+      });
+      after(() => {
+        productsModel.getById.restore();
+        productsModel.update.restore();
+      });
+
+      it('return the product updated', async () => {
+        const response = await productsService.update(updateProduct);
+
+        expect(response.id).to.be.equal(updateProduct.id);
+        expect(response.name).to.be.equal(updateProduct.name);
+        expect(response.quantity).to.be.equal(updateProduct.quantity);
       });
     });
   });

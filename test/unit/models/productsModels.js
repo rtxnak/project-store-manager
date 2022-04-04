@@ -104,4 +104,22 @@ describe('products models', () => {
       });
     });
   });
+
+  describe('endpoint PUT on /products/:id', () => {
+    describe('product was updated', () => {
+      before(async () => {
+        sinon.stub(connection, 'execute').resolves();
+      });
+      after(() => connection.execute.restore());
+
+      it('return the product updated', async () => {
+        const { saleid: id, name, quantity } = newProduct;
+        const response = await productsModel.update({ id, name, quantity });
+        
+        expect(response.id).to.be.equal(oneProduct[0].id);
+        expect(response.name).to.be.equal(oneProduct[0].name);
+        expect(response.quantity).to.be.equal(oneProduct[0].quantity);
+      });
+    });
+  });
 });

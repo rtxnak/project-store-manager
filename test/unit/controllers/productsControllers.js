@@ -123,4 +123,32 @@ describe('Products controller', () => {
       });
     });
   });
+
+  describe('endpoint PUT on /product/:id', () => {
+    describe('product was updated', () => {
+      const response = {};
+      const request = { 
+        body: newProduct,
+        params: { id: 1 },
+      };
+      before(() => {
+        response.status = sinon.stub()
+          .returns(response);
+        response.json = sinon.stub()
+          .returns();
+        sinon.stub(productsService, 'update').resolves(oneProduct)
+      })
+
+      after(() => productsService.update.restore());
+
+      it('return status 200', async () => {
+        await productsController.update(request, response);
+        expect(response.status.calledWith(200)).to.be.equal(true)
+      });
+      it('return json with product', async () => {
+        await productsController.update(request, response);
+        expect(response.json.calledWith(oneProduct)).to.be.equal(true)
+      });
+    });
+  });
 });
