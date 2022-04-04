@@ -30,7 +30,7 @@ const getById = async (saleId) => {
 const createSalesDate = async () => {
   const [{ insertId }] = await connection
     .execute(
-      'INSERT INTO sales (date) VALUES (now())',
+      'INSERT INTO StoreManager.sales (date) VALUES (now())',
     );
   return insertId;
 };
@@ -38,7 +38,7 @@ const createSalesDate = async () => {
 const create = async ({ ID, productId, quantity }) => {
   await connection
     .execute(
-      'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)',
+      'INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)',
       [ID, productId, quantity],
     );
 
@@ -54,7 +54,7 @@ const update = async (saleId, products) => {
     products.forEach(async ({ productId, quantity }) => {
       await connection.execute(
         `
-        UPDATE sales_products
+        UPDATE StoreManager.sales_products
         SET product_id = ?, quantity = ?
         WHERE sale_id = ? AND product_id = ?;`,
         [productId, quantity, saleId, productId],
