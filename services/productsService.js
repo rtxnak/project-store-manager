@@ -44,9 +44,23 @@ const update = async (id, name, quantity) => {
   }
 };
 
+const deleteById = async (id) => {
+  try {
+    const exist = await productsModel.getById(id);
+    if (!exist) {
+      return false;
+    }
+    await productsModel.deleteById(id);
+    return true;
+  } catch (error) {
+    return { error: 500, message: 'Erro no Servidor' };
+  }
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  deleteById,
 };
