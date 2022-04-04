@@ -131,4 +131,23 @@ describe('products services', () => {
       });
     });
   });
+
+  describe('endpoint DELETE on /products/:id', () => {
+    describe('product was deleted', () => {
+      before(async () => {
+        const { saleid: id, name, quantity } = newProduct;
+        sinon.stub(productsModel, 'getById').resolves({ id, name, quantity });
+        sinon.stub(productsModel, 'deleteById').resolves();
+      });
+      after(() => {
+        productsModel.getById.restore();
+        productsModel.deleteById.restore();
+      });
+
+      it('return undefined', async () => {
+        const response = await productsService.deleteById(1);
+        expect(response).to.be.equal(true);
+      });
+    });
+  });
 });

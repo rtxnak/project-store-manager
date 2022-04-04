@@ -151,4 +151,29 @@ describe('Products controller', () => {
       });
     });
   });
+
+  describe('endpoint DELETE on /product/:id', () => {
+    describe('product was deleted', () => {
+      const response = {};
+      const request = { 
+        params: { id: 1 },
+      };
+      before(() => {
+        response.status = sinon.stub()
+          .returns(response);
+        response.json = sinon.stub()
+          .returns();
+          response.end = sinon.stub()
+          .returns();
+        sinon.stub(productsService, 'deleteById').resolves(oneProduct);
+      })
+
+      after(() => productsService.deleteById.restore());
+
+      it('return status 204', async () => {
+        await productsController.deleteById(request, response);
+        expect(response.status.calledWith(204)).to.be.equal(true)
+      });
+    });
+  });
 });

@@ -115,10 +115,25 @@ describe('products models', () => {
       it('return the product updated', async () => {
         const { saleid: id, name, quantity } = newProduct;
         const response = await productsModel.update({ id, name, quantity });
-        
+
         expect(response.id).to.be.equal(oneProduct[0].id);
         expect(response.name).to.be.equal(oneProduct[0].name);
         expect(response.quantity).to.be.equal(oneProduct[0].quantity);
+      });
+    });
+  });
+
+  describe('endpoint DELETE on /products/:id', () => {
+    describe('product was deleted', () => {
+      before(async () => {
+        const execute = oneProduct;
+        sinon.stub(connection, 'execute').resolves(execute);
+      });
+      after(() => connection.execute.restore());
+
+      it('return undefined', async () => {
+        const response = await productsModel.deleteById(1);
+        expect(response).to.be.equal(undefined);
       });
     });
   });
