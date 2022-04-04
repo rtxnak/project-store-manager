@@ -39,9 +39,26 @@ const create = async (product) => {
   }
 };
 
+const update = async (saleId, products) => {
+  try {
+    const exist = await salesModel.getById(saleId);
+
+    if (!exist) {
+      return { error: 404, message: 'Product not found' };
+    }
+
+    const updated = await salesModel.update(saleId, products);
+
+    return updated;
+  } catch (error) {
+    return { error: 500, message: 'Erro no Servidor' };
+  }
+};
+
 module.exports = { 
   getAll, 
   getById,
   createSalesDate,
   create,
+  update,
 };
