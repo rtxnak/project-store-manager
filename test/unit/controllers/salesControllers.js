@@ -174,8 +174,32 @@ describe('Sales controller', () => {
       });
       it('return json with product', async () => {
         await salesController.update(request, response);
-        console.log(response.json)
         expect(response.json.calledWith(newSaleReturn)).to.be.equal(true)
+      });
+    });
+  });
+
+  describe('endpoint DELETE on /sales/:id', () => {
+    describe('sale was deleted', () => {
+      const response = {};
+      const request = { 
+        params: { id: 1 },
+      };
+      before(() => {
+        response.status = sinon.stub()
+          .returns(response);
+        response.json = sinon.stub()
+          .returns();
+          response.end = sinon.stub()
+          .returns();
+        sinon.stub(salesService, 'deleteById').resolves(arrayOfSalesById);
+      })
+
+      after(() => salesService.deleteById.restore());
+
+      it('return status 204', async () => {
+        await salesController.deleteById(request, response);
+        expect(response.status.calledWith(204)).to.be.equal(true)
       });
     });
   });

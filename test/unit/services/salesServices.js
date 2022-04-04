@@ -133,4 +133,22 @@ describe('sales models', () => {
       });
     });
   });
+
+  describe('endpoint DELETE on /sales/:id', () => {
+    describe('sales was deleted', () => {
+      before(async () => {
+        sinon.stub(salesModel, 'getById').resolves(newSaleUpdate);
+        sinon.stub(salesModel, 'deleteById').resolves();
+      });
+      after(() => {
+        salesModel.getById.restore();
+        salesModel.deleteById.restore();
+      });
+
+      it('return undefined', async () => {
+        const response = await salesService.deleteById(1);
+        expect(response).to.be.equal(true);
+      });
+    });
+  });
 });

@@ -104,7 +104,7 @@ describe('sales models', () => {
       });
       after(() => connection.execute.restore());
 
-      it('return the product created', async () => {
+      it('return the sales created', async () => {
         const response = await salesModel.create(newSale);
         expect(response.saleId).to.be.equal(newSaleReturn.saleId);
         expect(response.productId).to.be.equal(newSaleReturn.productId);
@@ -121,10 +121,25 @@ describe('sales models', () => {
       });
       after(() => connection.execute.restore());
 
-      it('return the product updated', async () => {
+      it('return the sales updated', async () => {
         const saleId = 1;
         const response = await salesModel.update(saleId, updateSale);
         expect(response.saleId).to.be.equal(saleId);        expect(response.itemUpdated).to.be.equal(updateSale);
+      });
+    });
+  });
+
+  describe('endpoint DELETE on /sales/:id', () => {
+    describe('sale was deleted', () => {
+      before(async () => {
+        const execute = updateSale;
+        sinon.stub(connection, 'execute').resolves(execute);
+      });
+      after(() => connection.execute.restore());
+
+      it('return undefined', async () => {
+        const response = await salesModel.deleteById(1);
+        expect(response).to.be.equal(undefined);
       });
     });
   });
