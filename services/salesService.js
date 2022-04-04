@@ -1,5 +1,7 @@
 const salesModel = require('../models/salesModel');
 
+const ERROR = { error: 500, message: 'Erro no Servidor' };
+
 const getAll = async () => {
   const sales = await salesModel.getAll();
   return sales;
@@ -11,7 +13,7 @@ const getById = async (id) => {
     return sales;
   } catch (error) {
     console.log(error);
-    return { error: 500, message: 'Erro no Servidor' };
+    return ERROR;
   }
 };
 
@@ -22,7 +24,7 @@ const createSalesDate = async () => {
     return createSalesID;
   } catch (error) {
     console.log(error);
-    return { error: 500, message: 'Erro no Servidor' };
+    return ERROR;
   }
 };
 
@@ -35,7 +37,7 @@ const create = async (product) => {
     return created;
   } catch (error) {
     console.log(error);
-    return { error: 500, message: 'Erro no Servidor' };
+    return ERROR;
   }
 };
 
@@ -51,14 +53,28 @@ const update = async (saleId, products) => {
 
     return updated;
   } catch (error) {
-    return { error: 500, message: 'Erro no Servidor' };
+    return ERROR;
   }
 };
 
-module.exports = { 
-  getAll, 
+const deleteById = async (id) => {
+  try {
+    const exist = await salesModel.getById(id);
+    if (exist.length <= 0) {
+      return false;
+    }
+    await salesModel.deleteById(id);
+    return true;
+  } catch (error) {
+    return ERROR;
+  }
+};
+
+module.exports = {
+  getAll,
   getById,
   createSalesDate,
   create,
   update,
+  deleteById,
 };

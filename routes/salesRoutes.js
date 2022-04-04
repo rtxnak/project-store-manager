@@ -12,11 +12,12 @@ routes
   .get('/', salesController.getAll)
   .get('/:id', salesController.getById)
   .post('/',
-  isValidSalesQuantity,
+    isValidSalesQuantity,
     isValidProductId,
     salesController.create)
   .put('/:id',
-  isValidSalesQuantity,
+    isValidSalesQuantity,
     isValidProductId,
-    salesController.update);
+    salesController.update)
+  .delete('/:id', salesController.deleteById);
 module.exports = routes;
